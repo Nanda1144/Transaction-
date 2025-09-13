@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="popup.js"></script>
+</head>
+<body>
+  <div id="fullscreen-popup">
+  <img src="https://uploads.onecompiler.io/43bfq86cy/43v2s28bb/1000080760.jpg" alt="Splash Logo" />
+</div>
+    <!-- Floating Navigation Menu -->
+    <div class="floating-menu">
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="menu-items" id="menuItems">
+            <a href="#" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a>
+            <a href="#" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a>
+            <a href="#" onclick="showSection('items')"><i class="fas fa-utensils"></i> Items</a>
+            <a href="#" onclick="showSection('dashboard')"><i class="fas fa-chart-bar"></i> Dashboard</a>
+            <a href="#" onclick="showSection('profit')"><i class="fas fa-dollar-sign"></i> Profit</a>
+            <a href="#" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Login Section -->
+        <section id="loginSection" class="section active">
+            <div class="login-container">
+                <h1>Hotel Management System</h1>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password">
+                </div>
+                <button class="btn-primary" onclick="login()">Login</button>
+            </div>
+        </section>
+
+        <!-- Home Section -->
+        <section id="homeSection" class="section">
+            <h1>Dashboard</h1>
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h3>Total Items</h3>
+                    <p id="totalItems">0</p>
+                </div>
+                <div class="card">
+                    <h3>Today's Transactions</h3>
+                    <p id="todayTransactions">0</p>
+                </div>
+                <div class="card">
+                    <h3>Today's Revenue</h3>
+                    <p id="todayRevenue">$0.00</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Items Section -->
+        <section id="itemsSection" class="section">
+            <div class="section-header">
+                <h1>Menu Items</h1>
+                <button class="btn-primary" onclick="showAddItemForm()">
+                    <i class="fas fa-plus"></i> Add Item
+                </button>
+            </div>
+            <div class="items-grid" id="itemsGrid">
+                <!-- Items will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboardSection" class="section">
+            <h1>Transaction Dashboard</h1>
+            <div class="chart-container">
+                <canvas id="transactionChart"></canvas>
+            </div>
+            <div class="date-filter">
+                <label for="dateFrom">From:</label>
+                <input type="date" id="dateFrom">
+                <label for="dateTo">To:</label>
+                <input type="date" id="dateTo">
+                <button class="btn-primary" onclick="updateDashboard()">Apply</button>
+            </div>
+        </section>
+
+        <!-- Profit Section -->
+        <section id="profitSection" class="section">
+            <h1>Profit Reports</h1>
+            <div class="chart-container">
+                <canvas id="profitChart"></canvas>
+            </div>
+            <div class="report-controls">
+                <button class="btn-primary" onclick="generateDailyReport()">Daily Report</button>
+                <button class="btn-primary" onclick="generateWeeklyReport()">Weekly Report</button>
+                <button class="btn-primary" onclick="generateMonthlyReport()">Monthly Report</button>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profileSection" class="section">
+            <h1>Hotel Profile</h1>
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-banner" id="profileBanner">
+                        <img src="images/default-banner.jpg" alt="Hotel Banner">
+                        <button class="edit-btn" onclick="editBanner()">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <img src="images/default-profile.png" alt="Profile">
+                            <button class="edit-btn" onclick="editProfilePic()">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                        <h2 id="hotelName">Hotel Name</h2>
+                        <p id="hotelAddress">Address</p>
+                        <p id="hotelLocation">Location</p>
+                        <p id="hotelPhone">Phone Number</p>
+                    </div>
+                </div>
+                <div class="profile-form">
+                    <h3>Edit Profile</h3>
+                    <div class="form-group">
+                        <label for="editHotelName">Hotel Name</label>
+                        <input type="text" id="editHotelName">
+                    </div>
+                    <div class="form-group">
+                        <label for="editHotelAddress">Address</label>
+                        <input type="text" id="editHotelAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="editHotelLocation">Location</label>
+                        <input type="text" id="editHotelLocation">
+                    </div>
+                    <div class="form-group">
+                        <label for="editHotelPhone">Phone Number</label>
+                        <input type="text" id="editHotelPhone">
+                    </div>
+                    <button class="btn-primary" onclick="saveProfile()">Save Changes</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settingsSection" class="section">
+            <h1>Settings</h1>
+            <div class="settings-container">
+                <div class="settings-group">
+                    <h3>Payment Settings</h3>
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod">
+                            <option value="qr">QR Code</option>
+                            <option value="card">Credit Card</option>
+                            <option value="cash">Cash</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Currency</label>
+                        <select id="currency">
+                            <option value="USD">USD ($)</option>
+                            <option value="IND">IND (RUPEES)</option>
+                            <option value="GBP">GBP (£)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <h3>QR Code Settings</h3>
+                    <div class="qr-container">
+                        <div id="qrcode"></div>
+                      <!-- <button class="btn-primary" onclick="generateQR()">Generate QR Code</button>-->
+                    </div>
+                </div>
+              <div class="qr-code inline-block p-4 rounded-lg">
+    <!-- Existing QR code image -->
+    <img id="user-qr-code" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2c2b4e78-e010-4463-8fad-870175dda5db.png" alt="PhonePe QR Code for payment scanning with shop logo and payment details" class="w-32 h-32 rounded-lg">
+
+    <!-- File input for QR code upload -->
+    <input type="file" id="qr-upload" accept="image/*" class="mt-3 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
+           file:rounded-full file:border-0
+           file:text-sm file:font-semibold
+           file:bg-blue-50 file:text-blue-700
+           hover:file:bg-blue-100"/>
+    <p class="text-center mt-2 text-sm">Upload your QR code</p>
+</div>
+
+                <div class="settings-group">
+                    <h3>Account</h3>
+                    <button class="btn-danger" onclick="resetData()">Reset All Data</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div id="addItemModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddItemForm()">&times;</span>
+            <h2>Add New Item</h2>
+            <form id="addItemForm">
+                <div class="form-group">
+                    <label for="itemName">Item Name</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemPrice">Price</label>
+                    <input type="number" id="itemPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemCategory">Category</label>
+                    <select id="itemCategory">
+                        <option value="food">Food</option>
+                        <option value="drink">Drink</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="itemImage">Image</label>
+                    <input type="file" id="itemImage" accept="image/*">
+                    <div class="image-preview" id="imagePreview">
+                        <img src="images/default-item.png" alt="Preview">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Add Item</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Transaction History Modal -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTransactionModal()">&times;</span>
+            <h2>Transaction History</h2>
+            <div class="transaction-list" id="transactionList">
+                <!-- Transactions will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script src="script.js"></script>
+  <script src="qrcode.js"></script>
+</body>
+</html>
